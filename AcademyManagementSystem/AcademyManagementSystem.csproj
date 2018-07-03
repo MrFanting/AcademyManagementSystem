@@ -42,8 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\DataOperate.cs" />
+    <Compile Include="Object\Student.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tool\Tool.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
