@@ -24,6 +24,7 @@ namespace AcademyManagementSystem
         }
         public static string GetLoginResponseJson(UserAccount userAccount)
         {
+
         }
         /*
                  public static UserAccount GetUserAccountJson(string jsonString)
