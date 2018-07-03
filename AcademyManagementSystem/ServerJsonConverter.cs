@@ -22,16 +22,9 @@ namespace AcademyManagementSystem
             UserAccount userAccount = JsonConvert.DeserializeObject<UserAccount>(jsonUserAccountText);
             return userAccount;
         }
-        public static string GetLoginResponseJson(UserAccount userAccount)
+        public static string GetLoginResponseJson(ConnectionInfo connectionInfo)
         {
-
+            return JsonConvert.SerializeObject(connectionInfo);
         }
-        /*
-                 public static UserAccount GetUserAccountJson(string jsonString)
-        {
-            var jsonMessage = new { type = login, data = userAccount };
-            return JsonConvert.SerializeObject(jsonMessage);
-        }
-         */
     }
 }
