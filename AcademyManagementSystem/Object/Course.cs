@@ -13,5 +13,11 @@ namespace AcademyManagementSystem.Object
         private string credit;
         private string property;
         private string teacherName;
+
+        public string Id { get => id; set => id = value; }
+        public string Con { get => con; set => con = value; }
+        public string Credit { get => credit; set => credit = value; }
+        public string Property { get => property; set => property = value; }
+        public string TeacherName { get => teacherName; set => teacherName = value; }
     }
 }
