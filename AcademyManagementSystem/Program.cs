@@ -10,6 +10,8 @@ namespace AcademyManagementSystem
     {
         static void Main(string[] args)
         {
+            //Console.Write(ServerJsonConverter.GetUserAccountJson(new UserAccount("2015", "pw", UserAccount.student)));
+            Console.ReadKey();
         }
     }
 }
