@@ -195,6 +195,7 @@ namespace AcademyManagementSystem.Tool
             }
             finally
             {
+
                 try
                 {
                     sqlDataReader.Close();
