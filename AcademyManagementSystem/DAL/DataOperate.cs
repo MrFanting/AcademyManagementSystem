@@ -49,22 +49,20 @@ namespace AcademyManagementSystem.DAL
             {
                 m_Conn.Open(); //打开连接
             }
-            SqlTransaction sqlTran = m_Conn.BeginTransaction(); //开始数据库事务
+            
             try
             {
-                m_Cmd.Transaction = sqlTran; //设置 m_Cmd 的事务属性
                 foreach (string item in strSqls) //循环读取字符串列表集合
                 {
                     m_Cmd.CommandType = CommandType.Text; //设置命令类型为 SQL 文本命令
                     m_Cmd.CommandText = item; //设置要对数据源执行的 SQL 语句
                     m_Cmd.ExecuteNonQuery(); //执行 SQL 语句并返回受影响的行数
                 }
-                sqlTran.Commit(); //提交事务，持久化数据
+                
                 booIsSucceed = true; //表示提交数据库成功
             }
             catch
             {
-                sqlTran.Rollback(); //回滚事务，恢复数据
                 booIsSucceed = false; //表示提交数据库失败
             }
             finally
@@ -74,7 +72,31 @@ namespace AcademyManagementSystem.DAL
             }
             return booIsSucceed; //方法返回值
         }
+        public bool ExecDataBySql(string strSql)
+        {
+            bool booIsSucceed; //定义返回值变量
+            if (m_Conn.State == ConnectionState.Closed) //判断当前的数据库连接状态
+            {
+                m_Conn.Open(); //打开连接
+            }
+            m_Cmd.CommandType = CommandType.Text; //设置命令类型为 SQL 文本命令
+            m_Cmd.CommandText = strSql; //设置要对数据源执行的 SQL 语句
 
+            try
+            {
+                m_Cmd.ExecuteNonQuery(); //执行 SQL 语句并返回受影响的行数
+                booIsSucceed = true; //表示提交数据库成功
+            }
+            catch
+            {
+                booIsSucceed = false; //表示提交数据库失败
+            }
+            finally
+            {
+                m_Conn.Close(); //关闭连接
+            }
+            return booIsSucceed; //方法返回值
+        }
         internal string GetSingleObject(string strSql)
         {
             string str = "";
@@ -164,9 +186,6 @@ namespace AcademyManagementSystem.DAL
             return dt; //返回 DataTable 对象
         }
 
-        internal int ExecDataBySql(string strSql)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

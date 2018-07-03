@@ -129,7 +129,7 @@ namespace AcademyManagementSystem.Tool
             return teacher;
         }
 
-        public Course queryCourseById(string id)//按id查找教师信息,成功返回teacher对象，失败返回null.
+        public Course queryCourseById(string id)//按id查找课程信息,成功返回course对象，失败返回null.
         {
 
             SqlDataReader sqlDataReader = null;
@@ -205,6 +205,134 @@ namespace AcademyManagementSystem.Tool
 
 
             return courses;
+        }
+
+        public List<Score> queryScore(string id,int type)//成绩查询,成功返回成绩集合，失败返回null，0代表学生，1表示老师
+        {
+            List<Score> scores = null;
+            SqlDataReader sqlDataReader = null;
+            Score score = null;
+            string strSql = "";
+            if (type == 0)
+            {
+                strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
+                    "score.学号='" + id + "' AND score.课程号=course.课程号 AND score.学号=student.学号";
+            }
+            else
+            {
+                strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
+                    "教师编号='"+id+"' AND score.课程号=course.课程号 AND student.学号=score.学号";
+            }
+            
+            sqlDataReader = dataOperate.GetDataReader(strSql);
+            try
+            {
+                while (sqlDataReader.Read())
+                {
+                    score = new Score();
+                    score.StudentId = sqlDataReader["学号"].ToString();
+                    score.CourseId = sqlDataReader["课程号"].ToString();
+                    score.StudentName = sqlDataReader["姓名"].ToString();
+                    score.Con = sqlDataReader["课程名"].ToString();
+                    score.Mark = sqlDataReader["成绩"].ToString();
+                    scores.Add(score);
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+                try
+                {
+                    sqlDataReader.Close();
+                }
+                catch { }
+            }
+
+
+            return scores;
+        }
+
+        public Room queryRoom(Room r)//输入教室,查询是否空闲,成功返回room对象,空闲与否存在idle字段,失败返回null
+        {
+
+            SqlDataReader sqlDataReader = null;
+            Room room = null;
+            string strSql = "SELECT 时间,是否空闲 FROM room WHERE 教室编号='" + r.Id+"'";
+            sqlDataReader = dataOperate.GetDataReader(strSql);
+            try
+            {
+                if (sqlDataReader.HasRows)
+                {
+                    room = new Room();
+                    while (sqlDataReader.Read())
+                    {
+                        string time = sqlDataReader["时间"].ToString();
+                        if (time=="上午")
+                        {
+                            room.IsIdleMorning = sqlDataReader["是否空闲"].ToString();
+                        }
+                        else if (time == "中午")
+                        {
+                            room.IsIdleNoon = sqlDataReader["是否空闲"].ToString();
+                        }
+                        else
+                        {
+                            room.IsIdleAfternoon = sqlDataReader["是否空闲"].ToString();
+                        }
+                    }
+                }
+                
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                try
+                {
+                    sqlDataReader.Close();
+                }
+                catch { }
+            }
+
+            return room;
+        }
+
+        public bool updateUserCode(UserAccount user)//输入用户,修改密码
+        {
+
+            string strSql = "";
+            if (user.Type == "teacher")
+            {
+                strSql = "UPDATE teacher_code SET 登录密码 = '"+user.Password+"' WHERE 教师编号='"+user.Account+"'";
+            }
+            else
+            {
+                strSql = "UPDATE student_code SET 登录密码 = '"+user.Password+"' WHERE 学号='"+user.Account+"'";
+            }
+            if (dataOperate.ExecDataBySql(strSql))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool updateScore(Score score)//修改成绩
+        {
+
+            string strSql = "";
+            strSql = "UPDATE score SET 成绩 = '"+score.Mark+"' WHERE 学号='"+score.StudentId+"' " +
+                "AND 课程号='"+score.CourseId+"'";
+            if (dataOperate.ExecDataBySql(strSql))
+            {
+                return true;
+            }
+            return false;
         }
 
     }
