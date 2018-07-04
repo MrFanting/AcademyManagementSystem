@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -12,64 +13,29 @@ namespace AcademyManagementSystem
     {
         public static void StartListening()
         {
-            // Data buffer for incoming data.  
-            byte[] bytes = new Byte[1024];
+            SortedDictionary<int, int> sessionPool = new SortedDictionary<int, int>();
+            IPAddress ipAddress = IPAddress.Parse("127.0.0.1");
+            TcpListener listener = new TcpListener(ipAddress, 6666);
 
-            // Establish the local endpoint for the socket.  
-            // Dns.GetHostName returns the name of the   
-            // host running the application.  
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+            listener.Start();
 
-            // Create a TCP/IP socket.  
-            Socket listener = new Socket(ipAddress.AddressFamily,
-                SocketType.Stream, ProtocolType.Tcp);
-
-            // Bind the socket to the local endpoint and   
-            // listen for incoming connections.  
-            try
+            while (true)
             {
-                listener.Bind(localEndPoint);
-                listener.Listen(10);
+                Console.Write("Waiting for connection...");
+                TcpClient client = listener.AcceptTcpClient();
 
-                // Start listening for connections.  
-                while (true)
+                Console.WriteLine("Connection accepted.");
+                NetworkStream ns = client.GetStream();
+                StreamReader sr = new StreamReader(ns);
+                StreamWriter sw = new StreamWriter(ns);
+
+                string request = sr.ReadLine();
+                ConnectionInfo connectionInfo = ServerJsonConverter.GetConnInfoFromJson(request);
+                if (connectionInfo.Type == ConnectionInfo.login)
                 {
-                    Socket handler = listener.Accept();
-                    data = null;
 
-                    // An incoming connection needs to be processed.  
-                    while (true)
-                    {
-                        int bytesRec = handler.Receive(bytes);
-                        data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                        if (data.IndexOf("<EOF>") > -1)
-                        {
-                            break;
-                        }
-                    }
-
-                    // Show the data on the console.  
-                    Console.WriteLine("Text received : {0}", data);
-
-                    // Echo the data back to the client.  
-                    byte[] msg = Encoding.ASCII.GetBytes(data);
-
-                    handler.Send(msg);
-                    handler.Shutdown(SocketShutdown.Both);
-                    handler.Close();
                 }
-
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
-            Console.WriteLine("\nPress ENTER to continue...");
-            Console.Read();
-
         }
 
         static void Main(string[] args)
