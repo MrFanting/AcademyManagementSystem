@@ -13,5 +13,6 @@ namespace AcademyManagementSystem.Object
         public string Credit { get; set; }
         public string Property { get; set; }
         public string TeacherName { get; set; }
+        public string TeacherId { get; set; }
     }
 }

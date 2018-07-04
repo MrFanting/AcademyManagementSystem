@@ -13,7 +13,7 @@ namespace AcademyManagementSystem.Tool
     {
         private DataOperate dataOperate = new DataOperate();
 
-        public bool verifyStudent(UserAccount user) //用户登录验证（学生或老师）
+        public bool VerifyStudent(UserAccount user) //用户登录验证（学生或老师）
         {
             
             SqlDataReader sqlDataReader = null;
@@ -55,7 +55,7 @@ namespace AcademyManagementSystem.Tool
             return true;
         }
 
-        public Student queryStudentById(string id)//按id查找学生信息,成功返回student对象，失败返回null.
+        public Student QueryStudentById(string id)//按id查找学生信息,成功返回student对象，失败返回null.
         {
             
             SqlDataReader sqlDataReader = null;
@@ -72,9 +72,10 @@ namespace AcademyManagementSystem.Tool
                     student = new Student();
                     student.Id = sqlDataReader["学号"].ToString();
                     student.Name = sqlDataReader["姓名"].ToString();
-                    student.Major = sqlDataReader["专业名"].ToString();
+                    student.Major = sqlDataReader["培养方案名称"].ToString();
                     student.Birth = sqlDataReader["出生年月"].ToString();
                     student.Number = sqlDataReader["手机号"].ToString();
+                    student.Gender = sqlDataReader["性别"].ToString();
                 }
             }
             catch
@@ -92,7 +93,7 @@ namespace AcademyManagementSystem.Tool
             return student;
         }
 
-        public Teacher queryTeacherById(string id)//按id查找教师信息,成功返回teacher对象，失败返回null.
+        public Teacher QueryTeacherById(string id)//按id查找教师信息,成功返回teacher对象，失败返回null.
         {
 
             SqlDataReader sqlDataReader = null;
@@ -129,12 +130,12 @@ namespace AcademyManagementSystem.Tool
             return teacher;
         }
 
-        public Course queryCourseById(string id)//按id查找课程信息,成功返回course对象，失败返回null.
+        public Course QueryCourseById(string id)//按id查找课程信息,成功返回course对象，失败返回null.
         {
 
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT 课程号,课程名,学分,性质,姓名 FROM teacher,course WHERE " +
+            string strSql = "SELECT 课程号,课程名,学分,性质,姓名,course.教师编号 FROM teacher,course WHERE " +
                 "课程号='"+id+"' AND teacher.教师编号=course.教师编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
@@ -148,7 +149,8 @@ namespace AcademyManagementSystem.Tool
                     course.Property = sqlDataReader["性质"].ToString();
                     course.Credit = sqlDataReader["学分"].ToString();
                     course.TeacherName = sqlDataReader["姓名"].ToString();
-                    
+                    course.TeacherId= sqlDataReader["教师编号"].ToString();
+
                 }
             }   
             catch
@@ -167,7 +169,7 @@ namespace AcademyManagementSystem.Tool
             return course;
         }
 
-        public List<Course> queryTrainingProgram(string id)//培养方案查询,成功返回课程集合，失败返回null
+        public List<Course> QueryTrainingProgram(string id)//培养方案查询,成功返回课程集合，失败返回null
         {
             List<Course> courses = null;
             SqlDataReader sqlDataReader = null;
@@ -186,6 +188,7 @@ namespace AcademyManagementSystem.Tool
                     course.Property = sqlDataReader["性质"].ToString();
                     course.Credit = sqlDataReader["学分"].ToString();
                     course.TeacherName = sqlDataReader["姓名"].ToString();
+                    course.TeacherId = sqlDataReader["教师编号"].ToString();
                     courses.Add(course);
                 }
             }
@@ -207,22 +210,94 @@ namespace AcademyManagementSystem.Tool
             return courses;
         }
 
-        public List<Score> queryScore(string id,int type)//成绩查询,成功返回成绩集合，失败返回null，0代表学生，1表示老师
+        public List<Course> QueryCourseByTeacherId(string teacherId)//培养方案查询,成功返回课程集合，失败返回null
+        {
+            List<Course> courses = null;
+            SqlDataReader sqlDataReader = null;
+            Course course = null;
+            string strSql = "SELECT 课程号,课程名,学分,性质,姓名 FROM teacher,course WHERE " +
+                "teacher.教师编号='" + teacherId + "' AND teacher.教师编号=course.教师编号";
+            sqlDataReader = dataOperate.GetDataReader(strSql);
+            try
+            {
+                while (sqlDataReader.Read())
+                {
+                    course = new Course();
+                    course.Id = sqlDataReader["课程号"].ToString();
+                    course.Con = sqlDataReader["课程名"].ToString();
+                    course.Property = sqlDataReader["性质"].ToString();
+                    course.Credit = sqlDataReader["学分"].ToString();
+                    course.TeacherName = sqlDataReader["姓名"].ToString();
+                    course.TeacherId = teacherId;
+                    courses.Add(course);
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+                try
+                {
+                    sqlDataReader.Close();
+                }
+                catch { }
+            }
+
+
+            return courses;
+        }
+
+        public List<Score> StudengQueryScore(string id)//成绩查询,成功返回成绩集合
         {
             List<Score> scores = null;
             SqlDataReader sqlDataReader = null;
             Score score = null;
-            string strSql = "";
-            if (type == 0)
+            string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
+                    "score.学号='" + id + "' AND score.课程号=course.课程号 AND score.学号=student.学号"; ;
+    
+            sqlDataReader = dataOperate.GetDataReader(strSql);
+            try
             {
-                strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
-                    "score.学号='" + id + "' AND score.课程号=course.课程号 AND score.学号=student.学号";
+                while (sqlDataReader.Read())
+                {
+                    score = new Score();
+                    score.StudentId = sqlDataReader["学号"].ToString();
+                    score.CourseId = sqlDataReader["课程号"].ToString();
+                    score.StudentName = sqlDataReader["姓名"].ToString();
+                    score.Con = sqlDataReader["课程名"].ToString();
+                    score.Mark = sqlDataReader["成绩"].ToString();
+                    scores.Add(score);
+                }
             }
-            else
+            catch
             {
-                strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
-                    "教师编号='"+id+"' AND score.课程号=course.课程号 AND student.学号=score.学号";
+
             }
+            finally
+            {
+
+                try
+                {
+                    sqlDataReader.Close();
+                }
+                catch { }
+            }
+
+
+            return scores;
+        }
+
+        public List<Score> TeacherQueryScore(Course course)//成绩查询,成功返回成绩集合
+        {
+            List<Score> scores = null;
+            SqlDataReader sqlDataReader = null;
+            Score score = null;
+            string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
+                    "教师编号='" + course.TeacherId + "' AND score.课程号='"+course.Id+"" +
+                    "' AND score.课程号=course.课程号 AND student.学号=score.学号";
             
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
@@ -256,7 +331,7 @@ namespace AcademyManagementSystem.Tool
             return scores;
         }
 
-        public Room queryRoom(Room r)//输入教室,查询是否空闲,成功返回room对象,空闲与否存在idle字段,失败返回null
+        public Room QueryRoom(Room r)//输入教室,查询是否空闲,成功返回room对象,空闲与否存在idle字段,失败返回null
         {
 
             SqlDataReader sqlDataReader = null;
@@ -303,7 +378,7 @@ namespace AcademyManagementSystem.Tool
             return room;
         }
 
-        public bool updateUserCode(UserAccount user)//输入用户,修改密码
+        public bool UpdateUserCode(UserAccount user)//输入用户,修改密码
         {
 
             string strSql = "";
@@ -322,13 +397,19 @@ namespace AcademyManagementSystem.Tool
             return false;
         }
 
-        public bool updateScore(Score score)//修改成绩
+        public bool UpdateScore(List<Score> scores)//修改成绩
         {
 
             string strSql = "";
-            strSql = "UPDATE score SET 成绩 = '"+score.Mark+"' WHERE 学号='"+score.StudentId+"' " +
-                "AND 课程号='"+score.CourseId+"'";
-            if (dataOperate.ExecDataBySql(strSql))
+            List<string> strSqls = new List<string>();
+            foreach(Score score in scores)
+            {
+                strSql = "UPDATE score SET 成绩 = '" + score.Mark + "' WHERE 学号='" + score.StudentId + "' " +
+                "AND 课程号='" + score.CourseId + "'";
+                strSqls.Add(strSql);
+            }
+            
+            if (dataOperate.ExecDataBySqls(strSqls))
             {
                 return true;
             }

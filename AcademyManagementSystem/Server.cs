@@ -59,7 +59,7 @@ namespace AcademyManagementSystem
                 GetUserAccountFromJson(requestJson);
             ConnectionInfo connectionInfo = null;
             bool valid = false;
-            if (dataHandler.verifyStudent(userAccount))
+            if (dataHandler.VerifyStudent(userAccount))
             {
                 int session = sessionManager.AddOnlineUser(userAccount);
                 connectionInfo = new ConnectionInfo(session, 
@@ -116,7 +116,7 @@ namespace AcademyManagementSystem
 
         public void HandleStudentPersonalInfo(string account, StreamWriter sw)
         {
-            sw.WriteLine(dataHandler.queryStudentById(account));
+            sw.WriteLine(dataHandler.QueryStudentById(account));
             return;
         }
 
@@ -146,7 +146,7 @@ namespace AcademyManagementSystem
         public void HandleGetCourseInfo(string request, StreamWriter sw)
         {
             Course course = ServerJsonConverter.GetCourseFromJson(request);
-            Course resultCourse = dataHandler.queryCourseById(course.Id);
+            Course resultCourse = dataHandler.QueryCourseById(course.Id);
             bool found = resultCourse != null;
             sw.WriteLine(ServerJsonConverter.GetCourseReponseJson(
                 ServerResponse.GetServerResponse(found), resultCourse));
@@ -165,7 +165,7 @@ namespace AcademyManagementSystem
 
         public void HandleMajorCourse(string account, StreamWriter sw)
         {
-            IList<Course> courses = dataHandler.queryTrainingProgram(account);
+            IList<Course> courses = dataHandler.QueryTrainingProgram(account);
             bool found = courses != null;
             sw.WriteLine(ServerJsonConverter.GetMajorCoursesResponseJson(
                 ServerResponse.GetServerResponse(found), courses));
@@ -175,7 +175,7 @@ namespace AcademyManagementSystem
         public void HandleTeacherCoursesInfo(string account, StreamWriter sw)
         {
             // todo
-            IList<Course> courses = dataHandler.queryTrainingProgram(account);
+            IList<Course> courses = dataHandler.QueryTrainingProgram(account);
             bool found = courses != null;
             sw.WriteLine(ServerJsonConverter.GetMajorCoursesResponseJson(
                 ServerResponse.GetServerResponse(found), courses));
