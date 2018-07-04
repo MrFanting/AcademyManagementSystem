@@ -8,7 +8,7 @@ namespace AcademyManagementSystem
 {
     class ConnectionInfo
     {
-        public static readonly string login = "login", 
+        public const string login = "login", 
             updatePassword = "updatePassword", 
             studentGetPersonalInfo = "studentGetPersonalInfo",
             studentGetGrades = "studentGetGrades",
@@ -22,5 +22,10 @@ namespace AcademyManagementSystem
             teacherUpdateCourseGrades = "teacherUpdateCourseGrades";
         public int Session { set; get; }
         public string Type { set; get; }
+        public ConnectionInfo(int session, string type)
+        {
+            Session = session;
+            Type = type;
+        }
     }
 }

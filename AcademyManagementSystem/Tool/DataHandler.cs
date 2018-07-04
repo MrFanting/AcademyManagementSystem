@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AcademyManagementSystem.Tool
 {
-    class Tool
+    class DataHandler
     {
         private DataOperate dataOperate = new DataOperate();
 

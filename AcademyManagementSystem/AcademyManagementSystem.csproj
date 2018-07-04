@@ -48,6 +48,7 @@
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="DAL\DataOperate.cs" />
     <Compile Include="Object\Course.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="ServerResponse.cs" />
     <Compile Include="Object\Room.cs" />
     <Compile Include="Object\Score.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Object\UserAccount.cs" />
     <Compile Include="SessionManager.cs" />
-    <Compile Include="Tool\Tool.cs" />
+    <Compile Include="Tool\DataHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
