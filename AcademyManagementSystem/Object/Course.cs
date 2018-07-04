@@ -8,10 +8,10 @@ namespace AcademyManagementSystem.Object
 {
     class Course
     {
-        private string id;
-        private string con;//课程名
-        private string credit;
-        private string property;
-        private string teacherName;
+        public string Id { get; set; }
+        public string Con { get; set; }
+        public string Credit { get; set; }
+        public string Property { get; set; }
+        public string TeacherName { get; set; }
     }
 }

@@ -9,12 +9,14 @@ namespace AcademyManagementSystem.Object
 {
     class Score
     {
-        private string con;
-        private string studentName;
-        private string mark;
 
-        public string Con { get => con; set => con = value; }
-        public string StudentName { get => studentName; set => studentName = value; }
-        public string Mark { get => mark; set => mark = value; }
+        //显示使用
+        public string Con { get; set; }
+        public string StudentName { get; set; }
+        public string Mark { get; set; }
+
+        //查询使用
+        public string CourseId { get; set; }
+        public string StudentId { get; set; }
     }
 }

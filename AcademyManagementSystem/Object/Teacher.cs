@@ -8,14 +8,9 @@ namespace AcademyManagementSystem.Object
 {
     class Teacher
     {
-        private string id;
-        private string name;
-        private string gender;
-        private string age;
-
-        public string Id { get => id; set => id = value; }
-        public string Name { get => name; set => name = value; }
-        public string Gender { get => gender; set => gender = value; }
-        public string Age { get => age; set => age = value; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public string Age { get; set; }
     }
 }
