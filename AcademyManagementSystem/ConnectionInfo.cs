@@ -9,7 +9,7 @@ namespace AcademyManagementSystem
     class ConnectionInfo
     {
         public static readonly string login = "login";
-        public int session { set; get; }
-        public string type { set; get; }
+        public int Session { set; get; }
+        public string Type { set; get; }
     }
 }

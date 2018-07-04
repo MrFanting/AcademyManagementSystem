@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="DAL\DataOperate.cs" />
-    <Compile Include="JsonMessage.cs" />
     <Compile Include="Object\Course.cs" />
     <Compile Include="Object\Room.cs" />
     <Compile Include="Object\Score.cs" />
