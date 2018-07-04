@@ -48,9 +48,9 @@ namespace AcademyManagementSystem
                 {
                     HandleServiceRequest(connectionInfo, request, sw);
                 }
+                sw.Flush();
                 ns.Close();
                 client.Close();
-
             }
         }
         public void HandleLogin(string requestJson, StreamWriter sw)
@@ -65,7 +65,6 @@ namespace AcademyManagementSystem
                 connectionInfo = new ConnectionInfo(session, 
                     ConnectionInfo.login);
                 valid = true;
-                
             }
             string responseJson = ServerJsonConverter.
                     GetLoginResponseJson(ServerResponse.GetServerResponse(valid),
@@ -86,6 +85,31 @@ namespace AcademyManagementSystem
             switch (connectionInfo.Type)
             {
                 case ConnectionInfo.studentGetPersonalInfo:
+                    HandleStudentPersonalInfo(account, sw);
+                    break;
+                case ConnectionInfo.studentGetGrades:
+                    HandleStudentGetGrades(account, sw);
+                    break;
+                case ConnectionInfo.studentGetCourseInfo:
+                    HandleGetCourseInfo(requestJson, sw);
+                    break;
+                case ConnectionInfo.getRoom:
+                    HandleRoom(requestJson, sw);
+                    break;
+                case ConnectionInfo.getMajorCourses:
+                    HandleMajorCourse(account, sw);
+                    break;
+                case ConnectionInfo.teacherGetPersonalInfo:
+                    HandleTeacherPersonalInfo(account, sw);
+                    break;
+                case ConnectionInfo.teacherGetCourses:
+                    HandleTeacherCoursesInfo(account, sw);
+                    break;
+                case ConnectionInfo.teacherGetCourseGrades:
+                    HandleStudentGetGrades(account, sw);
+                    break;
+                case ConnectionInfo.teacherUpdateCourseGrades:
+                    HandleTeacherUpdateGrades(requestJson, sw);
                     break;
             }
         }
@@ -113,9 +137,58 @@ namespace AcademyManagementSystem
         }
         public void HandleStudentGetGrades(string account, StreamWriter sw)
         {
+            // todo
             // IList<Score> grades = dataHandler.queryScore(account, );
             // sw.WriteLine(dataHandler.);
             return;
         }
+
+        public void HandleGetCourseInfo(string request, StreamWriter sw)
+        {
+            Course course = ServerJsonConverter.GetCourseFromJson(request);
+            Course resultCourse = dataHandler.queryCourseById(course.Id);
+            bool found = resultCourse != null;
+            sw.WriteLine(ServerJsonConverter.GetCourseReponseJson(
+                ServerResponse.GetServerResponse(found), resultCourse));
+            return;
+        }
+
+        public void HandleRoom(string request, StreamWriter sw)
+        {
+            Room room = ServerJsonConverter.GetRoomFromJson(request);
+            Room resultRoom = dataHandler.queryRoom(room);
+            bool found = resultRoom != null;
+            sw.WriteLine(ServerJsonConverter.GetRoomResponseJson(
+                ServerResponse.GetServerResponse(found), resultRoom));
+            return;
+        }
+
+        public void HandleMajorCourse(string account, StreamWriter sw)
+        {
+            IList<Course> courses = dataHandler.queryTrainingProgram(account);
+            bool found = courses != null;
+            sw.WriteLine(ServerJsonConverter.GetMajorCoursesResponseJson(
+                ServerResponse.GetServerResponse(found), courses));
+            return;
+        }
+
+        public void HandleTeacherCoursesInfo(string account, StreamWriter sw)
+        {
+            // todo
+            IList<Course> courses = dataHandler.queryTrainingProgram(account);
+            bool found = courses != null;
+            sw.WriteLine(ServerJsonConverter.GetMajorCoursesResponseJson(
+                ServerResponse.GetServerResponse(found), courses));
+            return;
+        }
+
+        public void HandleTeacherUpdateGrades(string request, StreamWriter sw)
+        {
+            // todo
+            
+            return;
+        }
+
+
     }
 }

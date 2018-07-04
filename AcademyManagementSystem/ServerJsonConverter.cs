@@ -90,15 +90,23 @@ namespace AcademyManagementSystem
             return JsonConvert.SerializeObject(new { serverResponse, course });
         }
 
-        // rooms
-        public static string GetRoomsResponseJson(ServerResponse serverResponse,
-            IList<Room> rooms)
+        // room
+        public static Room GetRoomFromJson(string jsonRequestText)
         {
-            return JsonConvert.SerializeObject(new { serverResponse, rooms });
+            JObject jsonRequest = JObject.Parse(jsonRequestText);
+            string jsonCourseText = jsonRequest["room"].ToString();
+            Room room = JsonConvert.
+                DeserializeObject<Room>(jsonCourseText);
+            return room;
+        }
+        public static string GetRoomResponseJson(ServerResponse serverResponse,
+            Room room)
+        {
+            return JsonConvert.SerializeObject(new { serverResponse, room });
         }
 
-        // student courses
-        public static string GetStudentCoursesResponseJson(
+        // MajorCourses
+        public static string GetMajorCoursesResponseJson(
             ServerResponse serverResponse, IList<Course> courses)
         {
             return JsonConvert.SerializeObject(new { serverResponse, courses });
@@ -109,13 +117,6 @@ namespace AcademyManagementSystem
             ServerResponse serverResponse, IList<Course> courses)
         {
             return JsonConvert.SerializeObject(new { serverResponse, courses });
-        }
-
-        // teacher add course/update course
-        public static string GetTeacherCourseModifyResponseJson(
-            ServerResponse serverResponse)
-        {
-            return JsonConvert.SerializeObject(new { serverResponse });
         }
 
         // course grades

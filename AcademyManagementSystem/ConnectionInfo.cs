@@ -13,11 +13,10 @@ namespace AcademyManagementSystem
             studentGetPersonalInfo = "studentGetPersonalInfo",
             studentGetGrades = "studentGetGrades",
             studentGetCourseInfo = "studentGetCourseInfo", 
-            getIdleRooms = "getIdleRooms", 
+            getRoom = "getRoom", 
             getMajorCourses = "getMajorCourses",
             teacherGetPersonalInfo= "teacherGetPersonalInfo",
             teacherGetCourses = "teacherGetCourses", 
-            teacherModifyCourse = "teacherModifyCourse",
             teacherGetCourseGrades = "teacherGetCourseGrades",
             teacherUpdateCourseGrades = "teacherUpdateCourseGrades";
         public int Session { set; get; }
