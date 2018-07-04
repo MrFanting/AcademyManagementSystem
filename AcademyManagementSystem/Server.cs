@@ -88,7 +88,7 @@ namespace AcademyManagementSystem
                     HandleStudentPersonalInfo(account, sw);
                     break;
                 case ConnectionInfo.studentGetGrades:
-                    HandleStudentGetGrades(account, sw);
+                    HandleStudentGetGrades(requestJson, sw);
                     break;
                 case ConnectionInfo.studentGetCourseInfo:
                     HandleGetCourseInfo(requestJson, sw);
@@ -122,7 +122,7 @@ namespace AcademyManagementSystem
 
         public void HandleTeacherPersonalInfo(string account, StreamWriter sw)
         {
-            sw.WriteLine(dataHandler.queryTeacherById(account));
+            sw.WriteLine(dataHandler.QueryTeacherById(account));
             return;
         }
 
@@ -131,15 +131,16 @@ namespace AcademyManagementSystem
             UserAccount userAccount = ServerJsonConverter.GetUserAccountFromJson(
                 request);
 
-            bool isSuccess = dataHandler.updateUserCode(userAccount);
+            bool isSuccess = dataHandler.UpdateUserCode(userAccount);
             sw.WriteLine(ServerResponse.GetServerResponse(isSuccess));
             return;
         }
         public void HandleStudentGetGrades(string account, StreamWriter sw)
         {
-            // todo
-            // IList<Score> grades = dataHandler.queryScore(account, );
-            // sw.WriteLine(dataHandler.);
+            IList<Score> grades = dataHandler.StudengQueryScore(account);
+            bool isSuccess = grades != null;
+            sw.WriteLine(ServerJsonConverter.GetGradesResponseJson(
+                ServerResponse.GetServerResponse(isSuccess), grades));
             return;
         }
 
@@ -156,7 +157,7 @@ namespace AcademyManagementSystem
         public void HandleRoom(string request, StreamWriter sw)
         {
             Room room = ServerJsonConverter.GetRoomFromJson(request);
-            Room resultRoom = dataHandler.queryRoom(room);
+            Room resultRoom = dataHandler.QueryRoom(room);
             bool found = resultRoom != null;
             sw.WriteLine(ServerJsonConverter.GetRoomResponseJson(
                 ServerResponse.GetServerResponse(found), resultRoom));
@@ -174,8 +175,7 @@ namespace AcademyManagementSystem
 
         public void HandleTeacherCoursesInfo(string account, StreamWriter sw)
         {
-            // todo
-            IList<Course> courses = dataHandler.QueryTrainingProgram(account);
+            IList<Course> courses = dataHandler.QueryCourseByTeacherId(account);
             bool found = courses != null;
             sw.WriteLine(ServerJsonConverter.GetMajorCoursesResponseJson(
                 ServerResponse.GetServerResponse(found), courses));
@@ -184,8 +184,11 @@ namespace AcademyManagementSystem
 
         public void HandleTeacherUpdateGrades(string request, StreamWriter sw)
         {
-            // todo
-            
+            IList<Score> grades = ServerJsonConverter.GetCourseGradesUpdateFromJson(
+                request);
+            bool isSuccess = dataHandler.UpdateScore((List<Score>) grades);
+            sw.WriteLine(ServerJsonConverter.GetGeneralResponseJson(
+                ServerResponse.GetServerResponse(isSuccess)));
             return;
         }
 
