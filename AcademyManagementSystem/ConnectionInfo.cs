@@ -10,10 +10,12 @@ namespace AcademyManagementSystem
     {
         public static readonly string login = "login", 
             updatePassword = "updatePassword", 
+            studentGetPersonalInfo = "studentGetPersonalInfo",
             studentGetGrades = "studentGetGrades",
             studentGetCourseInfo = "studentGetCourseInfo", 
             getIdleRooms = "getIdleRooms", 
             getMajorCourses = "getMajorCourses",
+            teacherGetPersonalInfo= "teacherGetPersonalInfo",
             teacherGetCourses = "teacherGetCourses", 
             teacherModifyCourse = "teacherModifyCourse",
             teacherGetCourseGrades = "teacherGetCourseGrades",

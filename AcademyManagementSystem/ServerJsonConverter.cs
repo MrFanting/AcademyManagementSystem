@@ -43,6 +43,22 @@ namespace AcademyManagementSystem
                 new { serverResponse, connectionInfo });
         }
 
+        // student personal info
+        public static string GetStudentPersonalInfoResponseJson(
+            ServerResponse serverResponse, Student student)
+        {
+            return JsonConvert.SerializeObject(
+                new { serverResponse, student });
+        }
+
+        // teacher personal info
+        public static string GetTeacherPersonalInfoResponseJson(
+            ServerResponse serverResponse, Teacher teacher)
+        {
+            return JsonConvert.SerializeObject(
+                new { serverResponse, teacher });
+        }
+
         // password update
         // just use ParseJsonUserAccount, just the same
         public static string GetUpdatePasswordResponseJson(
