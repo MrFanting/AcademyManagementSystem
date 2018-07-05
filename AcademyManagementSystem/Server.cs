@@ -37,6 +37,7 @@ namespace AcademyManagementSystem
                 StreamReader sr = new StreamReader(ns);
                 StreamWriter sw = new StreamWriter(ns);
 
+                // string temp = sr.ReadToEnd();
                 string request = sr.ReadLine();
                 ConnectionInfo connectionInfo = ServerJsonConverter.
                     GetConnInfoFromJson(request);
@@ -59,7 +60,7 @@ namespace AcademyManagementSystem
                 GetUserAccountFromJson(requestJson);
             ConnectionInfo connectionInfo = null;
             bool valid = false;
-            if (dataHandler.VerifyStudent(userAccount))
+            if (dataHandler.VerifyUser(userAccount))
             {
                 int session = sessionManager.AddOnlineUser(userAccount);
                 connectionInfo = new ConnectionInfo(session, 
@@ -87,8 +88,11 @@ namespace AcademyManagementSystem
                 case ConnectionInfo.studentGetPersonalInfo:
                     HandleStudentPersonalInfo(account, sw);
                     break;
+                case ConnectionInfo.updatePassword:
+                    HandlePasswordUpdate(requestJson, sw);
+                    break;
                 case ConnectionInfo.studentGetGrades:
-                    HandleStudentGetGrades(requestJson, sw);
+                    HandleStudentGetGrades(account, sw);
                     break;
                 case ConnectionInfo.studentGetCourseInfo:
                     HandleGetCourseInfo(requestJson, sw);
@@ -116,13 +120,19 @@ namespace AcademyManagementSystem
 
         public void HandleStudentPersonalInfo(string account, StreamWriter sw)
         {
-            sw.WriteLine(dataHandler.QueryStudentById(account));
+            Student student = dataHandler.QueryStudentById(account);
+            string response = ServerJsonConverter.GetStudentPersonalInfoResponseJson(
+                ServerResponse.GetServerResponse(student != null), student);
+            sw.WriteLine(response);
             return;
         }
 
         public void HandleTeacherPersonalInfo(string account, StreamWriter sw)
         {
-            sw.WriteLine(dataHandler.QueryTeacherById(account));
+            Teacher teacher = dataHandler.QueryTeacherById(account);
+            string response = ServerJsonConverter.GetTeacherPersonalInfoResponseJson(
+                ServerResponse.GetServerResponse(teacher != null), teacher);
+            sw.WriteLine(response);
             return;
         }
 
@@ -132,12 +142,14 @@ namespace AcademyManagementSystem
                 request);
 
             bool isSuccess = dataHandler.UpdateUserCode(userAccount);
-            sw.WriteLine(ServerResponse.GetServerResponse(isSuccess));
+            string response = ServerJsonConverter.GetGeneralResponseJson(
+                ServerResponse.GetServerResponse(isSuccess));
+            sw.WriteLine(response);
             return;
         }
         public void HandleStudentGetGrades(string account, StreamWriter sw)
         {
-            IList<Score> grades = dataHandler.StudengQueryScore(account);
+            IList<Score> grades = dataHandler.StudentQueryScore(account);
             bool isSuccess = grades != null;
             sw.WriteLine(ServerJsonConverter.GetGradesResponseJson(
                 ServerResponse.GetServerResponse(isSuccess), grades));

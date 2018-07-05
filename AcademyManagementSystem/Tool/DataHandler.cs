@@ -13,7 +13,7 @@ namespace AcademyManagementSystem.Tool
     {
         private DataOperate dataOperate = new DataOperate();
 
-        public bool VerifyStudent(UserAccount user) //用户登录验证（学生或老师）
+        public bool VerifyUser(UserAccount user) //用户登录验证（学生或老师）
         {
             
             SqlDataReader sqlDataReader = null;
@@ -36,7 +36,8 @@ namespace AcademyManagementSystem.Tool
                 else
                 {
                     sqlDataReader.Read();
-                    if (user.Password != sqlDataReader["登录密码"].ToString())
+                    string s = sqlDataReader["登录密码"].ToString().Trim();
+                    if (user.Password != sqlDataReader["登录密码"].ToString().Trim())
                     {
                         return false;
                     }
@@ -171,10 +172,10 @@ namespace AcademyManagementSystem.Tool
 
         public List<Course> QueryTrainingProgram(string id)//培养方案查询,成功返回课程集合，失败返回null
         {
-            List<Course> courses = null;
+            List<Course> courses = new List<Course>();
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT course.课程号,课程名,学分,性质,teacher.姓名 FROM teacher,course,student,train WHERE " +
+            string strSql = "SELECT course.课程号,课程名,学分,性质,teacher.姓名,course.教师编号 FROM teacher,course,student,train WHERE " +
                 "学号='" + id + "' AND student.专业号=train.培养方案编号 AND train.课程号=course.课程号 " +
                 "AND teacher.教师编号=course.教师编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
@@ -205,14 +206,15 @@ namespace AcademyManagementSystem.Tool
                 }
                 catch { }
             }
-
+            if (courses.Count == 0)
+                return null;
 
             return courses;
         }
 
         public List<Course> QueryCourseByTeacherId(string teacherId)//培养方案查询,成功返回课程集合，失败返回null
         {
-            List<Course> courses = null;
+            List<Course> courses = new List<Course>();
             SqlDataReader sqlDataReader = null;
             Course course = null;
             string strSql = "SELECT 课程号,课程名,学分,性质,姓名 FROM teacher,course WHERE " +
@@ -245,14 +247,15 @@ namespace AcademyManagementSystem.Tool
                 }
                 catch { }
             }
-
+            if (courses.Count == 0)
+                return null;
 
             return courses;
         }
 
-        public List<Score> StudengQueryScore(string id)//成绩查询,成功返回成绩集合
+        public List<Score> StudentQueryScore(string id)//成绩查询,成功返回成绩集合
         {
-            List<Score> scores = null;
+            List<Score> scores = new List<Score>();
             SqlDataReader sqlDataReader = null;
             Score score = null;
             string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
@@ -286,13 +289,14 @@ namespace AcademyManagementSystem.Tool
                 catch { }
             }
 
-
+            if (scores.Count == 0)
+                return null;
             return scores;
         }
 
         public List<Score> TeacherQueryScore(Course course)//成绩查询,成功返回成绩集合
         {
-            List<Score> scores = null;
+            List<Score> scores = new List<Score>();
             SqlDataReader sqlDataReader = null;
             Score score = null;
             string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
@@ -326,7 +330,8 @@ namespace AcademyManagementSystem.Tool
                 }
                 catch { }
             }
-
+            if (scores.Count == 0)
+                return null;
 
             return scores;
         }
@@ -345,18 +350,18 @@ namespace AcademyManagementSystem.Tool
                     room = new Room();
                     while (sqlDataReader.Read())
                     {
-                        string time = sqlDataReader["时间"].ToString();
+                        string time = sqlDataReader["时间"].ToString().Trim();
                         if (time=="上午")
                         {
-                            room.IsIdleMorning = sqlDataReader["是否空闲"].ToString();
+                            room.IsIdleMorning = sqlDataReader["是否空闲"].ToString().Trim();
                         }
                         else if (time == "中午")
                         {
-                            room.IsIdleNoon = sqlDataReader["是否空闲"].ToString();
+                            room.IsIdleNoon = sqlDataReader["是否空闲"].ToString().Trim();
                         }
                         else
                         {
-                            room.IsIdleAfternoon = sqlDataReader["是否空闲"].ToString();
+                            room.IsIdleAfternoon = sqlDataReader["是否空闲"].ToString().Trim();
                         }
                     }
                 }

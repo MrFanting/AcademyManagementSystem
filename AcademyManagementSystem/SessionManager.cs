@@ -22,6 +22,7 @@ namespace AcademyManagementSystem
                 int session = Random.Next(int.MaxValue);
                 if (SessionPool.ContainsKey(session) == false)
                 {
+                    SessionPool.Add(session, userAccount.Account);   
                     return session;
                 }
             }
