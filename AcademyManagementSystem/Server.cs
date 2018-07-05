@@ -110,7 +110,7 @@ namespace AcademyManagementSystem
                     HandleTeacherCoursesInfo(account, sw);
                     break;
                 case ConnectionInfo.teacherGetCourseGrades:
-                    HandleStudentGetGrades(account, sw);
+                    HandleTeacherCourseGrades(requestJson, sw);
                     break;
                 case ConnectionInfo.teacherUpdateCourseGrades:
                     HandleTeacherUpdateGrades(requestJson, sw);
@@ -182,6 +182,17 @@ namespace AcademyManagementSystem
             bool found = courses != null;
             sw.WriteLine(ServerJsonConverter.GetMajorCoursesResponseJson(
                 ServerResponse.GetServerResponse(found), courses));
+            return;
+        }
+
+        public void HandleTeacherCourseGrades(string request, StreamWriter sw)
+        {
+            Course course = ServerJsonConverter.GetCourseForCourseGradesRequest(
+                request);
+            IList<Score> grades = dataHandler.TeacherQueryScore(course);
+            bool found = grades != null;
+            sw.WriteLine(ServerJsonConverter.GetCourseGradesResponseJson(
+                ServerResponse.GetServerResponse(found), grades));
             return;
         }
 
