@@ -11,6 +11,7 @@ namespace AcademyManagementSystem
     class ServerJsonConverter
     {
         // get conn info
+        string x = "";
         public static ConnectionInfo GetConnInfoFromJson(string jsonRequestText)
         {
             JObject jsonRequest = JObject.Parse(jsonRequestText);
