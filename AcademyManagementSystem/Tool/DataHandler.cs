@@ -136,8 +136,8 @@ namespace AcademyManagementSystem.Tool
 
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT 课程号,课程名,学分,性质,姓名,course.教师编号 FROM teacher,course WHERE " +
-                "课程号='"+id+"' AND teacher.教师编号=course.教师编号";
+            string strSql = "SELECT 课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM teacher,course,room_info "+
+                "WHERE 课程号="+id+" AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
             {
@@ -147,10 +147,10 @@ namespace AcademyManagementSystem.Tool
                     course = new Course();
                     course.Id = sqlDataReader["课程号"].ToString();
                     course.Con = sqlDataReader["课程名"].ToString();
-                    course.Property = sqlDataReader["性质"].ToString();
+                    course.CourseTime = sqlDataReader["上课时间"].ToString();
                     course.Credit = sqlDataReader["学分"].ToString();
-                    course.TeacherName = sqlDataReader["姓名"].ToString();
-                    course.TeacherId= sqlDataReader["教师编号"].ToString();
+                    course.TeacherName = sqlDataReader["教师姓名"].ToString();
+                    course.Place= sqlDataReader["地点"].ToString();
 
                 }
             }   
@@ -175,9 +175,8 @@ namespace AcademyManagementSystem.Tool
             List<Course> courses = new List<Course>();
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT course.课程号,课程名,学分,性质,teacher.姓名,course.教师编号 FROM teacher,course,student,train WHERE " +
-                "学号='" + id + "' AND student.专业号=train.培养方案编号 AND train.课程号=course.课程号 " +
-                "AND teacher.教师编号=course.教师编号";
+            string strSql = "SELECT 课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM teacher,course,room_info,pro " +
+                "WHERE 培养方案编号=" + id + " AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
             {
@@ -186,10 +185,53 @@ namespace AcademyManagementSystem.Tool
                     course = new Course();
                     course.Id = sqlDataReader["课程号"].ToString();
                     course.Con = sqlDataReader["课程名"].ToString();
-                    course.Property = sqlDataReader["性质"].ToString();
+                    course.CourseTime = sqlDataReader["上课时间"].ToString();
                     course.Credit = sqlDataReader["学分"].ToString();
-                    course.TeacherName = sqlDataReader["姓名"].ToString();
-                    course.TeacherId = sqlDataReader["教师编号"].ToString();
+                    course.TeacherName = sqlDataReader["教师姓名"].ToString();
+                    course.Place = sqlDataReader["地点"].ToString();
+                    courses.Add(course);
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+                try
+                {
+                    sqlDataReader.Close();
+                }
+                catch { }
+            }
+            if (courses.Count == 0)
+                return null;
+
+            return courses;
+        }
+
+        public List<Course> QueryCoursesByStudentId(string id)//培养方案查询,成功返回课程集合，失败返回null
+        {
+            List<Course> courses = new List<Course>();
+            SqlDataReader sqlDataReader = null;
+            Course course = null;
+            string strSql = "SELECT course.课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM " +
+                "teacher,course,room_info,student,score WHERE student.学号=" + id +
+                " AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号" +
+                " AND student.专业号=course.培养方案编号 AND score.课程号<>course.课程号";
+            sqlDataReader = dataOperate.GetDataReader(strSql);
+            try
+            {
+                while (sqlDataReader.Read())
+                {
+                    course = new Course();
+                    course.Id = sqlDataReader["课程号"].ToString();
+                    course.Con = sqlDataReader["课程名"].ToString();
+                    course.CourseTime = sqlDataReader["上课时间"].ToString();
+                    course.Credit = sqlDataReader["学分"].ToString();
+                    course.TeacherName = sqlDataReader["教师姓名"].ToString();
+                    course.Place = sqlDataReader["地点"].ToString();
                     courses.Add(course);
                 }
             }
@@ -217,8 +259,8 @@ namespace AcademyManagementSystem.Tool
             List<Course> courses = new List<Course>();
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT 课程号,课程名,学分,性质,姓名 FROM teacher,course WHERE " +
-                "teacher.教师编号='" + teacherId + "' AND teacher.教师编号=course.教师编号";
+            string strSql = "SELECT 课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM teacher,course,room_info " +
+                "WHERE course.教师编号=" + teacherId + " AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
             {
@@ -227,10 +269,10 @@ namespace AcademyManagementSystem.Tool
                     course = new Course();
                     course.Id = sqlDataReader["课程号"].ToString();
                     course.Con = sqlDataReader["课程名"].ToString();
-                    course.Property = sqlDataReader["性质"].ToString();
+                    course.CourseTime = sqlDataReader["上课时间"].ToString();
                     course.Credit = sqlDataReader["学分"].ToString();
-                    course.TeacherName = sqlDataReader["姓名"].ToString();
-                    course.TeacherId = teacherId;
+                    course.TeacherName = sqlDataReader["教师姓名"].ToString();
+                    course.Place = sqlDataReader["地点"].ToString();
                     courses.Add(course);
                 }
             }
@@ -258,8 +300,8 @@ namespace AcademyManagementSystem.Tool
             List<Score> scores = new List<Score>();
             SqlDataReader sqlDataReader = null;
             Score score = null;
-            string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
-                    "score.学号='" + id + "' AND score.课程号=course.课程号 AND score.学号=student.学号"; ;
+            string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE"+
+                " score.学号="+id+" AND score.课程号=course.课程号 AND score.学号=student.学号 AND 成绩 is not null"; 
     
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
@@ -299,9 +341,8 @@ namespace AcademyManagementSystem.Tool
             List<Score> scores = new List<Score>();
             SqlDataReader sqlDataReader = null;
             Score score = null;
-            string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student WHERE " +
-                    "教师编号='" + course.TeacherId + "' AND score.课程号='"+course.Id+"" +
-                    "' AND score.课程号=course.课程号 AND student.学号=score.学号";
+            string strSql = "SELECT 姓名,课程名,成绩,score.课程号,score.学号 FROM score,course,student"+
+                " WHERE score.课程号="+course.Id+" AND score.课程号=course.课程号 AND student.学号=score.学号";
             
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
@@ -313,7 +354,15 @@ namespace AcademyManagementSystem.Tool
                     score.CourseId = sqlDataReader["课程号"].ToString();
                     score.StudentName = sqlDataReader["姓名"].ToString();
                     score.Con = sqlDataReader["课程名"].ToString();
-                    score.Mark = sqlDataReader["成绩"].ToString();
+                    if (sqlDataReader["成绩"] != null)
+                    {
+                        score.Mark = sqlDataReader["成绩"].ToString();
+                    }
+                    else
+                    {
+                        score.Mark = "";
+                    }
+                    
                     scores.Add(score);
                 }
             }
@@ -409,8 +458,8 @@ namespace AcademyManagementSystem.Tool
             List<string> strSqls = new List<string>();
             foreach(Score score in scores)
             {
-                strSql = "UPDATE score SET 成绩 = '" + score.Mark + "' WHERE 学号='" + score.StudentId + "' " +
-                "AND 课程号='" + score.CourseId + "'";
+                strSql = "UPDATE score SET 成绩 = '" + score.Mark + "' WHERE 学号='" + score.StudentId.Trim() + "' " +
+                "AND 课程号='" + score.CourseId.Trim() + "'";
                 strSqls.Add(strSql);
             }
             

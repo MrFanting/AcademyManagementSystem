@@ -11,8 +11,8 @@ namespace AcademyManagementSystem.Object
         public string Id { get; set; }
         public string Con { get; set; }
         public string Credit { get; set; }
-        public string Property { get; set; }
+        public string CourseTime { get; set; }
         public string TeacherName { get; set; }
-        public string TeacherId { get; set; }
+        public string Place { get; set; }
     }
 }

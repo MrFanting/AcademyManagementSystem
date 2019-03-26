@@ -130,9 +130,14 @@ namespace AcademyManagementSystem
             return course;
         }
         public static string GetCourseGradesResponseJson(
-            ServerResponse serverResponse, IList<Score> scores)
+            ServerResponse serverResponse, IList<Score> grades)
         {
-            return JsonConvert.SerializeObject(new { serverResponse, scores });
+            return JsonConvert.SerializeObject(new { serverResponse, grades });
+        }
+
+        public  static string GetAllCoursesResponseJson(ServerResponse serverResponse, IList<Course> courses)
+        {
+            return JsonConvert.SerializeObject(new { serverResponse, courses });
         }
 
         // grades update
@@ -140,7 +145,7 @@ namespace AcademyManagementSystem
             string jsonRequestText)
         {
             JObject jsonRequest = JObject.Parse(jsonRequestText);
-            string jsonScoresText = jsonRequest["scores"].ToString();
+            string jsonScoresText = jsonRequest["grades"].ToString();
             IList<Score> scores = JsonConvert.
                 DeserializeObject<IList<Score>>(jsonScoresText);
             return scores;

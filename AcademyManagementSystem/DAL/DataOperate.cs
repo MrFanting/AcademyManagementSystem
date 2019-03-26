@@ -16,11 +16,7 @@ namespace AcademyManagementSystem.DAL
 
         public DataOperate()
         {
-            //string strServer = ReadFile.GetIniFileString("DataBase", "Server", "", Application.StartupPath + "\\Express.ini"); //获取登录用户
-            //string strUserID = ReadFile.GetIniFileString("DataBase", "UserID", "", Application.StartupPath + "\\Express.ini");//获取登录密码
-            //string strPwd = ReadFile.GetIniFileString("DataBase", "Pwd", "", Application.StartupPath + "\\ Express.ini");//数据库连接字符串
-            //string strConn = "Server = " + strServer + ";Database= db_Express;User id=" + strUserID + ";PWD=" + strPwd;
-            string strConn = "Server = localhost" + ";Database= QKB;User id=denghong" + ";PWD=lk126096";
+            string strConn = "Server = localhost" + ";Database= QKB;User id=LDH" + ";PWD=123456";
             try
             {
                 m_Conn = new SqlConnection(strConn); //创建数据库连接对象

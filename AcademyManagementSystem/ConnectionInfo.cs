@@ -15,7 +15,8 @@ namespace AcademyManagementSystem
             studentGetCourseInfo = "studentGetCourseInfo", 
             getRoom = "getRoom", 
             getMajorCourses = "getMajorCourses",
-            teacherGetPersonalInfo= "teacherGetPersonalInfo",
+            getAllCourses = "getAllCourses",
+            teacherGetPersonalInfo = "teacherGetPersonalInfo",
             teacherGetCourses = "teacherGetCourses", 
             teacherGetCourseGrades = "teacherGetCourseGrades",
             teacherUpdateCourseGrades = "teacherUpdateCourseGrades";

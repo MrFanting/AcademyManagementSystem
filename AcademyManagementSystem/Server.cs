@@ -115,7 +115,19 @@ namespace AcademyManagementSystem
                 case ConnectionInfo.teacherUpdateCourseGrades:
                     HandleTeacherUpdateGrades(requestJson, sw);
                     break;
+                case ConnectionInfo.getAllCourses:
+                    HandleGetAllCourses(sw);
+                    break;
             }
+        }
+
+        private void HandleGetAllCourses(StreamWriter sw)
+        {
+            IList<Course> courses = dataHandler.QueryCoursesById();
+            bool found = courses != null;
+            sw.WriteLine(ServerJsonConverter.GetAllCoursesResponseJson(
+                ServerResponse.GetServerResponse(found), courses));
+            return;
         }
 
         public void HandleStudentPersonalInfo(string account, StreamWriter sw)
