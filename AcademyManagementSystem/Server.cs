@@ -13,7 +13,6 @@ namespace AcademyManagementSystem
 {
     class Server
     {
-        string x = "";
         SessionManager sessionManager;
         DataHandler dataHandler;
         public Server()
