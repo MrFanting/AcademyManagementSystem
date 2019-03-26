@@ -48,6 +48,7 @@
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="DAL\DataOperate.cs" />
     <Compile Include="Object\Course.cs" />
+    <Compile Include="Object\RoomInfo.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerResponse.cs" />
     <Compile Include="Object\Room.cs" />

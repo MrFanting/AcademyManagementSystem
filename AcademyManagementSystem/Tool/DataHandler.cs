@@ -136,7 +136,7 @@ namespace AcademyManagementSystem.Tool
 
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT 课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM teacher,course,room_info "+
+            string strSql = "SELECT 课程号,课程名,培养方案编号,course.教室编号,学分,course.上课时间,地点,教师姓名 FROM teacher,course,room_info " +
                 "WHERE 课程号="+id+" AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
@@ -151,7 +151,8 @@ namespace AcademyManagementSystem.Tool
                     course.Credit = sqlDataReader["学分"].ToString();
                     course.TeacherName = sqlDataReader["教师姓名"].ToString();
                     course.Place= sqlDataReader["地点"].ToString();
-
+                    course.RoomId = sqlDataReader["教室编号"].ToString();
+                    course.ProgramId = sqlDataReader["培养方案编号"].ToString();
                 }
             }   
             catch
@@ -175,8 +176,8 @@ namespace AcademyManagementSystem.Tool
             List<Course> courses = new List<Course>();
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT 课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM teacher,course,room_info,pro " +
-                "WHERE 培养方案编号=" + id + " AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号";
+            string strSql = "SELECT 课程号,课程名,学分,course.教室编号,course.上课时间,地点,教师姓名 FROM teacher,course,room_info,pro " +
+                "WHERE pro.培养方案编号=" + id + " AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
             {
@@ -189,6 +190,8 @@ namespace AcademyManagementSystem.Tool
                     course.Credit = sqlDataReader["学分"].ToString();
                     course.TeacherName = sqlDataReader["教师姓名"].ToString();
                     course.Place = sqlDataReader["地点"].ToString();
+                    course.ProgramId = id;
+                    course.RoomId = sqlDataReader["教室编号"].ToString();
                     courses.Add(course);
                 }
             }
@@ -216,7 +219,7 @@ namespace AcademyManagementSystem.Tool
             List<Course> courses = new List<Course>();
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT course.课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM " +
+            string strSql = "SELECT course.课程号,课程名,course.教室编号,学分,course.培养方案编号,course.上课时间,地点,教师姓名 FROM " +
                 "teacher,course,room_info,student,score WHERE student.学号=" + id +
                 " AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号" +
                 " AND student.专业号=course.培养方案编号 AND score.课程号<>course.课程号";
@@ -232,6 +235,8 @@ namespace AcademyManagementSystem.Tool
                     course.Credit = sqlDataReader["学分"].ToString();
                     course.TeacherName = sqlDataReader["教师姓名"].ToString();
                     course.Place = sqlDataReader["地点"].ToString();
+                    course.ProgramId = sqlDataReader["培养方案编号"].ToString();
+                    course.RoomId = sqlDataReader["教室编号"].ToString();
                     courses.Add(course);
                 }
             }
@@ -259,7 +264,7 @@ namespace AcademyManagementSystem.Tool
             List<Course> courses = new List<Course>();
             SqlDataReader sqlDataReader = null;
             Course course = null;
-            string strSql = "SELECT 课程号,课程名,学分,course.上课时间,地点,教师姓名 FROM teacher,course,room_info " +
+            string strSql = "SELECT 课程号,课程名,学分,room_info.教室编号,course.上课时间,地点,教师姓名,培养方案编号 FROM teacher,course,room_info " +
                 "WHERE course.教师编号=" + teacherId + " AND teacher.教师编号=course.教师编号 AND room_info.教室编号=course.教室编号";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
@@ -273,6 +278,8 @@ namespace AcademyManagementSystem.Tool
                     course.Credit = sqlDataReader["学分"].ToString();
                     course.TeacherName = sqlDataReader["教师姓名"].ToString();
                     course.Place = sqlDataReader["地点"].ToString();
+                    course.ProgramId = sqlDataReader["培养方案编号"].ToString();
+                    course.RoomId = sqlDataReader["教室编号"].ToString();
                     courses.Add(course);
                 }
             }
@@ -385,33 +392,61 @@ namespace AcademyManagementSystem.Tool
             return scores;
         }
 
-        public Room QueryRoom(Room r)//输入教室,查询是否空闲,成功返回room对象,空闲与否存在idle字段,失败返回null
+        public List<Room> QueryRoomsIdle()//空闲教室查询，返回所有教室空闲时间
+        {
+            List<Room> rooms = new List<Room>();
+            SqlDataReader sqlDataReader = null;
+            Room room = null;
+            string strSql = "SELECT room.教室编号,空闲时间 FROM room WHERE 标识 NOT IN"+
+                " (SELECT 标识 FROM course INNER JOIN room ON room.教室编号=course.教室编号 AND room.空闲时间=course.上课时间)";
+
+            sqlDataReader = dataOperate.GetDataReader(strSql);
+            try
+            {
+                while (sqlDataReader.Read())
+                {
+                    room = new Room();
+                    room.Id = sqlDataReader["教室编号"].ToString();
+                    room.IdleTime = sqlDataReader["空闲时间"].ToString();
+                    rooms.Add(room);
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+                try
+                {
+                    sqlDataReader.Close();
+                }
+                catch { }
+            }
+
+            if (rooms.Count == 0)
+                return null;
+            return rooms;
+        }
+
+        public RoomInfo QueryRoomInfo(Room r)//输入教室,查询是否空闲,成功返回room对象,空闲与否存在idle字段,失败返回null
         {
 
             SqlDataReader sqlDataReader = null;
-            Room room = null;
-            string strSql = "SELECT 时间,是否空闲 FROM room WHERE 教室编号='" + r.Id+"'";
+            RoomInfo room = null;
+            string strSql = "SELECT 教室编号,容纳人数,地点 FROM room_info WHERE 教室编号='" + r.Id+"'";
             sqlDataReader = dataOperate.GetDataReader(strSql);
             try
             {
                 if (sqlDataReader.HasRows)
                 {
-                    room = new Room();
+                    room = new RoomInfo();
                     while (sqlDataReader.Read())
                     {
-                        string time = sqlDataReader["时间"].ToString().Trim();
-                        if (time=="上午")
-                        {
-                            room.IsIdleMorning = sqlDataReader["是否空闲"].ToString().Trim();
-                        }
-                        else if (time == "中午")
-                        {
-                            room.IsIdleNoon = sqlDataReader["是否空闲"].ToString().Trim();
-                        }
-                        else
-                        {
-                            room.IsIdleAfternoon = sqlDataReader["是否空闲"].ToString().Trim();
-                        }
+                        room.Id= sqlDataReader["教室编号"].ToString().Trim();
+                        room.Contain= sqlDataReader["容纳人数"].ToString().Trim();
+                        room.Place = sqlDataReader["地点"].ToString().Trim();
                     }
                 }
                 
@@ -431,7 +466,28 @@ namespace AcademyManagementSystem.Tool
 
             return room;
         }
+        public bool StudentChooseCourse(Score score)//输入用户,修改密码
+        {
 
+            string strSql = "INSERT INTO score(课程号,学号) VALUES(" + score.CourseId + "," + score.StudentId + ")";
+            if (dataOperate.ExecDataBySql(strSql))
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool TeacherInsertCourse(Course course,string id)//输入用户,修改密码
+        {
+
+            string strSql = "INSERT INTO course VALUES(" + course.Id + "," + course.Con +
+                "," + course.Credit + "," + course.ProgramId + "," + id + "," + course.CourseTime +
+                "," + course.RoomId + ")";
+            if (dataOperate.ExecDataBySql(strSql))
+            {
+                return true;
+            }
+            return false;
+        }
         public bool UpdateUserCode(UserAccount user)//输入用户,修改密码
         {
 
@@ -469,6 +525,16 @@ namespace AcademyManagementSystem.Tool
             }
             return false;
         }
+        public bool StudentDeleteCourse(Score score)//修改成绩
+        {
 
+            string strSql = "DELETE FROM score WHERE 学号='" + score.StudentId.Trim() + "' " +
+                "AND 课程号='" + score.CourseId.Trim() + "'";
+            if (dataOperate.ExecDataBySql(strSql))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

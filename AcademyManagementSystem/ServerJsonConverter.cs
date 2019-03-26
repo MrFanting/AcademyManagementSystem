@@ -91,7 +91,7 @@ namespace AcademyManagementSystem
         }
 
         // room
-        public static Room GetRoomFromJson(string jsonRequestText)
+        public static Room GetRoomInfoFromJson(string jsonRequestText)
         {
             JObject jsonRequest = JObject.Parse(jsonRequestText);
             string jsonCourseText = jsonRequest["room"].ToString();
@@ -99,10 +99,15 @@ namespace AcademyManagementSystem
                 DeserializeObject<Room>(jsonCourseText);
             return room;
         }
-        public static string GetRoomResponseJson(ServerResponse serverResponse,
-            Room room)
+        public static string GetRoomInfoResponseJson(ServerResponse serverResponse,
+            RoomInfo room)
         {
             return JsonConvert.SerializeObject(new { serverResponse, room });
+        }
+        public static string GetRoomIdleResponseJson(ServerResponse serverResponse,
+            List<Room> rooms)
+        {
+            return JsonConvert.SerializeObject(new { serverResponse, rooms });
         }
 
         // MajorCourses

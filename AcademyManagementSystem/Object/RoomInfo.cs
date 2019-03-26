@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace AcademyManagementSystem.Object
 {
-    class Room
+    class RoomInfo
     {
         public string Id { get; set; }
-        public string IdleTime { get; set; }
+        public string Contain { get; set; }
+        public string Place { get; set; }
     }
 }

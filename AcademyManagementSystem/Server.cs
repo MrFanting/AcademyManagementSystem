@@ -13,6 +13,7 @@ namespace AcademyManagementSystem
 {
     class Server
     {
+        string x = "";
         SessionManager sessionManager;
         DataHandler dataHandler;
         public Server()
@@ -97,8 +98,11 @@ namespace AcademyManagementSystem
                 case ConnectionInfo.studentGetCourseInfo:
                     HandleGetCourseInfo(requestJson, sw);
                     break;
-                case ConnectionInfo.getRoom:
-                    HandleRoom(requestJson, sw);
+                case ConnectionInfo.getRoomIdle:
+                    HandleRoomIdle(sw);
+                    break;
+                case ConnectionInfo.getRoomInfo:
+                    HandleRoomInfo(requestJson, sw);
                     break;
                 case ConnectionInfo.getMajorCourses:
                     HandleMajorCourse(account, sw);
@@ -115,15 +119,15 @@ namespace AcademyManagementSystem
                 case ConnectionInfo.teacherUpdateCourseGrades:
                     HandleTeacherUpdateGrades(requestJson, sw);
                     break;
-                case ConnectionInfo.getAllCourses:
-                    HandleGetAllCourses(sw);
+                case ConnectionInfo.studentGetCourseToChoose:
+                    HandleGetAllCourses(sw,account);
                     break;
             }
         }
 
-        private void HandleGetAllCourses(StreamWriter sw)
+        private void HandleGetAllCourses(StreamWriter sw,string account)
         {
-            IList<Course> courses = dataHandler.QueryCoursesById();
+            IList<Course> courses = dataHandler.QueryCoursesByStudentId(account);
             bool found = courses != null;
             sw.WriteLine(ServerJsonConverter.GetAllCoursesResponseJson(
                 ServerResponse.GetServerResponse(found), courses));
@@ -178,13 +182,22 @@ namespace AcademyManagementSystem
             return;
         }
 
-        public void HandleRoom(string request, StreamWriter sw)
+        public void HandleRoomIdle(StreamWriter sw)
         {
-            Room room = ServerJsonConverter.GetRoomFromJson(request);
-            Room resultRoom = dataHandler.QueryRoom(room);
-            bool found = resultRoom != null;
-            sw.WriteLine(ServerJsonConverter.GetRoomResponseJson(
-                ServerResponse.GetServerResponse(found), resultRoom));
+            List<Room> rooms = dataHandler.QueryRoomsIdle();
+            bool found = rooms != null;
+            sw.WriteLine(ServerJsonConverter.GetRoomIdleResponseJson(
+                ServerResponse.GetServerResponse(found), rooms));
+            return;
+        }
+
+        public void HandleRoomInfo(string request, StreamWriter sw)
+        {
+            Room room = ServerJsonConverter.GetRoomInfoFromJson(request);
+            RoomInfo roomInfo = dataHandler.QueryRoomInfo(room);
+            bool found = roomInfo != null;
+            sw.WriteLine(ServerJsonConverter.GetRoomInfoResponseJson(
+                ServerResponse.GetServerResponse(found), roomInfo));
             return;
         }
 
