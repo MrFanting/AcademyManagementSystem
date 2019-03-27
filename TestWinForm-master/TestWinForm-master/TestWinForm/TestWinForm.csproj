@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B9889E33-C7A8-41CD-BB0A-04A278393D9D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TestWinForm</RootNamespace>
+    <AssemblyName>TestWinForm</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="IrisSkin4, Version=2006.3.22.45, Culture=neutral, PublicKeyToken=127be25a6db25e07, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\IrisSkin4.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientJsonConverter.cs" />
+    <Compile Include="ConnectionInfo.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainStudent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainStudent.Designer.cs">
+      <DependentUpon>MainStudent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NetworkService.cs" />
+    <Compile Include="Object\Course.cs" />
+    <Compile Include="Object\Room.cs" />
+    <Compile Include="Object\RoomInfo.cs" />
+    <Compile Include="Object\Score.cs" />
+    <Compile Include="Object\Student.cs" />
+    <Compile Include="Object\Teacher.cs" />
+    <Compile Include="Object\UserAccount.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerResponse.cs" />
+    <Compile Include="MainTeacher.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainTeacher.Designer.cs">
+      <DependentUpon>MainTeacher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ClassRoom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ClassRoom.Designer.cs">
+      <DependentUpon>ClassRoom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Course_Choose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Course_Choose.Designer.cs">
+      <DependentUpon>Course_Choose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Form_Account.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Form_Account.Designer.cs">
+      <DependentUpon>Form_Account.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Form_Grade.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Form_Grade.Designer.cs">
+      <DependentUpon>Form_Grade.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Form_Pwd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Form_Pwd.Designer.cs">
+      <DependentUpon>Form_Pwd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Plan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Plan.Designer.cs">
+      <DependentUpon>Plan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ScoreWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ScoreWin.Designer.cs">
+      <DependentUpon>ScoreWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TeacherAccount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\TeacherAccount.Designer.cs">
+      <DependentUpon>TeacherAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TeacherCourse.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\TeacherCourse.Designer.cs">
+      <DependentUpon>TeacherCourse.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainStudent.resx">
+      <DependentUpon>MainStudent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="MainTeacher.resx">
+      <DependentUpon>MainTeacher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ClassRoom.resx">
+      <DependentUpon>ClassRoom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Course_Choose.resx">
+      <DependentUpon>Course_Choose.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Form_Account.resx">
+      <DependentUpon>Form_Account.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Form_Grade.resx">
+      <DependentUpon>Form_Grade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Form_Pwd.resx">
+      <DependentUpon>Form_Pwd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Plan.resx">
+      <DependentUpon>Plan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ScoreWin.resx">
+      <DependentUpon>ScoreWin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TeacherAccount.resx">
+      <DependentUpon>TeacherAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TeacherCourse.resx">
+      <DependentUpon>TeacherCourse.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
