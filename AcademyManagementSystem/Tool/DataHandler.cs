@@ -525,16 +525,36 @@ namespace AcademyManagementSystem.Tool
             }
             return false;
         }
-        public bool StudentDeleteCourse(Score score)//修改成绩
+        public bool StudentDeleteCourse(Score score)//删除选课
         {
-
             string strSql = "DELETE FROM score WHERE 学号='" + score.StudentId.Trim() + "' " +
                 "AND 课程号='" + score.CourseId.Trim() + "'";
-            if (dataOperate.ExecDataBySql(strSql))
-            {
-                return true;
-            }
-            return false;
+            return dataOperate.ExecDataBySql(strSql);
+        }
+        public bool StudentAddCourse(Score score)//选课
+        {
+            string strSql = "INSERT INTO score(课程号,学号) VALUES(" + score.CourseId.Trim() + "," +score.StudentId.Trim() + ")";
+            return dataOperate.ExecDataBySql(strSql);
+        }
+        public bool TeacherAddCourse(Course course,string account)//教师添加课程
+        {
+            string strSql = "INSERT INTO course VALUES('"+course.Id.Trim()+"','"+course.Con.Trim()+"','"+
+                course.Credit.Trim()+"','"+course.ProgramId.Trim()+"','"+account+"','"+
+                course.CourseTime.Trim()+"','"+course.RoomId.Trim()+"')";
+            return dataOperate.ExecDataBySql(strSql);
+        }
+        public bool TeacherUpdateCourse(Course course)//教师更新课程信息
+        {
+            string strSql = "UPDATE course SET 上课时间='"+course.CourseTime.Trim()+"',教室编号='"+
+                course.RoomId.Trim()+"' WHERE 课程号='"+course.Id.Trim()+"'";
+            return dataOperate.ExecDataBySql(strSql);
+        }
+        public bool TeacherDeleteCourse(Course course)//教师删除课程
+        {
+            List<string> strSqls = new List<string>();
+            strSqls.Add("DELETE FROM score WHERE 课程号="+course.Id.Trim());
+            strSqls.Add("DELETE FROM course WHERE 课程号 ="+course.Id.Trim());
+            return dataOperate.ExecDataBySqls(strSqls);
         }
     }
 }

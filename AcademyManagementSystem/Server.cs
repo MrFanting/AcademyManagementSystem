@@ -121,7 +121,67 @@ namespace AcademyManagementSystem
                 case ConnectionInfo.studentGetCourseToChoose:
                     HandleGetAllCourses(sw,account);
                     break;
+                case ConnectionInfo.studentDeleteCourse:
+                    HandleStudentDeleteCourse(requestJson,sw);
+                    break;
+                case ConnectionInfo.studentInsertCourse:
+                    HandleStudentInsertCourse(requestJson, sw);
+                    break;
+                case ConnectionInfo.teacherAddCourse:
+                    HandleTeacherAddCourse(requestJson, sw,account);
+                    break;
+                case ConnectionInfo.teacherUpdateCourse:
+                    HandleTeacherUpdateCourse(requestJson, sw);
+                    break;
+                case ConnectionInfo.teacherDeleteCourse:
+                    HandleTeacherDeleteCourse(requestJson, sw);
+                    break;
             }
+        }
+
+        private void HandleTeacherDeleteCourse(string request, StreamWriter sw)
+        {
+            Course course = ServerJsonConverter.GetCourseFromJson(request);
+            bool result = dataHandler.DeleteCourseById(course.Id);
+            sw.WriteLine(ServerJsonConverter.GetGeneralResponseJson(
+                ServerResponse.GetServerResponse(result)));
+            return;
+        }
+
+        private void HandleTeacherUpdateCourse(string request, StreamWriter sw)
+        {
+            Course course = ServerJsonConverter.GetCourseFromJson(request);
+            bool result = dataHandler.TeacherUpdateCourse(course);
+            sw.WriteLine(ServerJsonConverter.GetGeneralResponseJson(
+                ServerResponse.GetServerResponse(result)));
+            return;
+        }
+
+        private void HandleTeacherAddCourse(string request, StreamWriter sw, string account)
+        {
+            Course course = ServerJsonConverter.GetCourseFromJson(request);
+            bool result = dataHandler.TeacherAddCourse(course);
+            sw.WriteLine(ServerJsonConverter.GetGeneralResponseJson(
+                ServerResponse.GetServerResponse(result)));
+            return;
+        }
+
+        private void HandleStudentInsertCourse(string request, StreamWriter sw)
+        {
+            Score score = ServerJsonConverter.GetScoreFromJson(request);
+            bool result = dataHandler.StudentAddCourse(score);
+            sw.WriteLine(ServerJsonConverter.GetGeneralResponseJson(
+                ServerResponse.GetServerResponse(result)));
+            return;
+        }
+
+        private void HandleStudentDeleteCourse(string request, StreamWriter sw)
+        {
+            Score score = ServerJsonConverter.GetScoreFromJson(request);
+            bool result = dataHandler.StudentDeleteCourse(score);
+            sw.WriteLine(ServerJsonConverter.GetGeneralResponseJson(
+                ServerResponse.GetServerResponse(result)));
+            return;
         }
 
         private void HandleGetAllCourses(StreamWriter sw,string account)

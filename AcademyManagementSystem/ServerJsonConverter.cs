@@ -74,7 +74,15 @@ namespace AcademyManagementSystem
         {
             return JsonConvert.SerializeObject(new { serverResponse, grades });
         }
-
+        // just response
+        public static Score GetScoreFromJson(string jsonRequestText)
+        {
+            JObject jsonRequest = JObject.Parse(jsonRequestText);
+            string jsonCourseText = jsonRequest["score"].ToString();
+            Score score = JsonConvert.
+                DeserializeObject<Score>(jsonCourseText);
+            return score;
+        }
         // course info
         public static Course GetCourseFromJson(string jsonRequestText)
         {

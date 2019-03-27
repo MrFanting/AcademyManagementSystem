@@ -14,6 +14,7 @@ namespace AcademyManagementSystem
             studentGetGrades = "studentGetGrades",
             studentGetCourseInfo = "studentGetCourseInfo",
             studentInsertCourse = "studentInsertCourse",
+            studentDeleteCourse = "studentDeleteCourse",
             studentGetCourseToChoose = "studentGetCourseToChoose",
             studentGetCourseChoosed = "studentGetCourseChoosed",
             getRoomIdle = "getRoomIdle",
@@ -22,6 +23,9 @@ namespace AcademyManagementSystem
             teacherGetPersonalInfo = "teacherGetPersonalInfo",
             teacherGetCourses = "teacherGetCourses", 
             teacherGetCourseGrades = "teacherGetCourseGrades",
+            teacherAddCourse = "teacherAddCourse",
+            teacherDeleteCourse = "teacherDeleteCourse",
+            teacherUpdateCourse = "teacherUpdateCourse",
             teacherUpdateCourseGrades = "teacherUpdateCourseGrades";
         public int Session { set; get; }
         public string Type { set; get; }
