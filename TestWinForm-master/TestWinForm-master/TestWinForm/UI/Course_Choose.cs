@@ -8,44 +8,68 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TestWinForm.Object;
+using System.Text.RegularExpressions;
 
 namespace TestWinForm.UI
 {
     public partial class Course_Choose : Form
     {
+        IList<Course> coursesList = new List<Course>();
+        IList<Course> coursesListQuery = new List<Course>();
+
         public Course_Choose()
         {
             InitializeComponent();
         }
 
-        private void AddInfo(Course course)
-        {
-            if (course != null)
-            {
-                id.Text = course.Id;
-                course_time.Text = course.CourseTime;
-                course_name.Text = course.Con;
-                credit.Text = course.Credit;
-                teacher.Text = course.TeacherName;
-            }
-            else
-            {
-                MessageBox.Show("没有这门课");
-            }
-            
-        }
-
+        
+        
         private void Course_Choose_Load(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = NetworkService.GetCoursesToChoose();
+            coursesList = NetworkService.GetCoursesToChoose();
+            dataGridView1.DataSource = coursesList;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             Course course = new Course();
+            Regex reg = new Regex(".*");            
             course.Id = id.Text.ToString().Trim();
-            course = NetworkService.GetCourseInfo(course);
-            AddInfo(course);
+            course.Con = course_name.Text.ToString().Trim();
+            course.TeacherName = teacher.Text.ToString().Trim();
+            int flag = 0;
+            foreach (Course cour in coursesList)
+            {
+                if (!course.Id.Equals(""))
+                {
+                    if (course.Id.Equals(cour.Id))
+                        flag++;
+                }
+                else { flag++; }
+                if (!course.Con.Equals(""))
+                {
+                    if (course.Con.Equals(cour.Id)) 
+                        flag++;
+                }
+                else { flag++; }
+                if (!course.TeacherName.Equals(""))
+                {
+                    if (course.TeacherName.Equals(cour.Id)) 
+                        flag++;
+                }
+                else
+                {
+                    flag++;
+                }
+                if (flag == 3)
+                {
+                    coursesListQuery.Add(cour);
+                }
+                flag = 0;
+                dataGridView1.DataSource = coursesListQuery;
+            }
+            //course = NetworkService.GetCourseInfo(course);
+            
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -59,10 +83,12 @@ namespace TestWinForm.UI
 
         private void button3_Click(object sender, EventArgs e)
         {
+            Score score = new Score();
             string course_id = id.Text.ToString().Trim();
             if (course_id != "")
             {
-                //NetworkService.InsertCourseStudent(course_id);
+                score.CourseId = course_id;
+                NetworkService.InsertStudentCourse(score);
             }
         }
 

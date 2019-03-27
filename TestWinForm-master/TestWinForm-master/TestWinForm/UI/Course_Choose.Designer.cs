@@ -60,6 +60,7 @@
             this.id.Name = "id";
             this.id.Size = new System.Drawing.Size(100, 21);
             this.id.TabIndex = 2;
+            //this.id.ReadOnly = true;
             // 
             // label1
             // 
@@ -94,6 +95,7 @@
             this.credit.Name = "credit";
             this.credit.Size = new System.Drawing.Size(100, 21);
             this.credit.TabIndex = 7;
+            this.credit.ReadOnly = true;
             // 
             // label3
             // 
@@ -111,7 +113,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 12);
             this.label4.TabIndex = 10;
-            this.label4.Text = "   教师   ";
+            this.label4.Text = "   教师   ";          
             // 
             // teacher
             // 
@@ -119,7 +121,7 @@
             this.teacher.Location = new System.Drawing.Point(94, 220);
             this.teacher.Name = "teacher";
             this.teacher.Size = new System.Drawing.Size(100, 21);
-            this.teacher.TabIndex = 11;
+            this.teacher.TabIndex = 11;            
             // 
             // select
             // 
@@ -167,6 +169,7 @@
             this.course_time.Name = "course_time";
             this.course_time.Size = new System.Drawing.Size(100, 21);
             this.course_time.TabIndex = 17;
+            this.course_time.ReadOnly = true;
             // 
             // Course_Choose
             // 
